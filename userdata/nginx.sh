@@ -4,7 +4,7 @@ apt install nginx -y
 cat <<EOT > vproapp
 upstream vproapp {
 
- server vprofileapp01:8080;
+ server vproapp01:8080;
 
 }
 
