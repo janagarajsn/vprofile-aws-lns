@@ -1,67 +1,52 @@
 #!/bin/bash
 DATABASE_PASS='admin123'
 
-# Install Memcached
-sudo apt-get update -y
-sudo apt-get install memcached -y
-sudo systemctl start memcached
-sudo systemctl enable memcached
-sudo systemctl status memcached
-sudo memcached -p 11211 -U 11111 -u memcached -d
+# MEmcache
+yum install epel-release -y
+yum install memcached -y
+systemctl start memcached
+systemctl enable memcached
+systemctl status memcached
+memcached -p 11211 -U 11111 -u memcached -d
 
-# Install RabbitMQ dependencies
-sudo apt-get install socat -y
-sudo apt-get install erlang -y
-sudo apt-get install wget -y
+# Rabbit
+yum install socat -y
+yum install erlang -y
+yum install wget -y
+wget https://www.rabbitmq.com/releases/rabbitmq-server/v3.6.10/rabbitmq-server-3.6.10-1.el7.noarch.rpm
+rpm --import https://www.rabbitmq.com/rabbitmq-release-signing-key.asc
+yum update
+rpm -Uvh rabbitmq-server-3.6.10-1.el7.noarch.rpm
+systemctl start rabbitmq-server
+systemctl enable rabbitmq-server
+systemctl status rabbitmq-server
+echo "[{rabbit, [{loopback_users, []}]}]." > /etc/rabbitmq/rabbitmq.config
+rabbitmqctl add_user rabbit bunny
+rabbitmqctl set_user_tags rabbit administrator
+systemctl restart rabbitmq-server
 
-# Download and install RabbitMQ
-wget https://www.rabbitmq.com/releases/rabbitmq-server/v3.6.10/rabbitmq-server_3.6.10-1_all.deb
-sudo apt-get install -y ./rabbitmq-server_3.6.10-1_all.deb
+# Mysql
+yum install mariadb-server -y
 
-# Import the RabbitMQ signing key
-wget -O- https://www.rabbitmq.com/rabbitmq-release-signing-key.asc | sudo apt-key add -
+#mysql_secure_installation
+sed -i 's/^127.0.0.1/0.0.0.0/' /etc/my.cnf
 
-# Update package list and install RabbitMQ server
-sudo apt-get update
-sudo dpkg -i rabbitmq-server_3.6.10-1_all.deb
+# starting & enabling mariadb-server
+systemctl start mariadb
+systemctl enable mariadb
 
-# Start and enable RabbitMQ server
-sudo systemctl start rabbitmq-server
-sudo systemctl enable rabbitmq-server
-sudo systemctl status rabbitmq-server
-
-# Configure RabbitMQ to allow remote access
-sudo sh -c 'echo "[{rabbit, [{loopback_users, []}]}]." > /etc/rabbitmq/rabbitmq.config'
-
-# Add a RabbitMQ user and set administrator privileges
-sudo rabbitmqctl add_user rabbit bunny
-sudo rabbitmqctl set_user_tags rabbit administrator
-
-# Restart RabbitMQ server to apply changes
-sudo systemctl restart rabbitmq-server
-
-# Install MariaDB server
-sudo apt-get install mariadb-server -y
-
-# Allow remote access to MariaDB
-sudo sed -i 's/^bind-address\s*=.*$/bind-address = 0.0.0.0/' /etc/mysql/mariadb.conf.d/50-server.cnf
-
-# Start and enable MariaDB server
-sudo systemctl start mariadb
-sudo systemctl enable mariadb
-
-# Secure MariaDB installation and restore the database
-sudo mysqladmin -u root password "$DATABASE_PASS"
-sudo mysql -u root -p"$DATABASE_PASS" -e "UPDATE mysql.user SET authentication_string=PASSWORD('$DATABASE_PASS') WHERE User='root'"
-sudo mysql -u root -p"$DATABASE_PASS" -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')"
-sudo mysql -u root -p"$DATABASE_PASS" -e "DELETE FROM mysql.user WHERE User=''"
-sudo mysql -u root -p"$DATABASE_PASS" -e "DELETE FROM mysql.db WHERE Db='test' OR Db='test\_%'"
-sudo mysql -u root -p"$DATABASE_PASS" -e "FLUSH PRIVILEGES"
+#restore the dump file for the application
+mysqladmin -u root password "$DATABASE_PASS"
+mysql -u root -p"$DATABASE_PASS" -e "UPDATE mysql.user SET Password=PASSWORD('$DATABASE_PASS') WHERE User='root'"
+mysql -u root -p"$DATABASE_PASS" -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')"
+mysql -u root -p"$DATABASE_PASS" -e "DELETE FROM mysql.user WHERE User=''"
+mysql -u root -p"$DATABASE_PASS" -e "DELETE FROM mysql.db WHERE Db='test' OR Db='test\_%'"
+mysql -u root -p"$DATABASE_PASS" -e "FLUSH PRIVILEGES"
 sudo mysql -u root -p"$DATABASE_PASS" -e "CREATE DATABASE accounts"
 sudo mysql -u root -p"$DATABASE_PASS" -e "GRANT ALL PRIVILEGES ON accounts.* TO 'admin'@'localhost' IDENTIFIED BY 'admin123'"
 sudo mysql -u root -p"$DATABASE_PASS" -e "GRANT ALL PRIVILEGES ON accounts.* TO 'admin'@'app01' IDENTIFIED BY 'admin123'"
-sudo mysql -u root -p"$DATABASE_PASS" accounts < /vagrant/vprofile-repo/src/main/resources/db_backup.sql
-sudo mysql -u root -p"$DATABASE_PASS" -e "FLUSH PRIVILEGES"
+mysql -u root -p"$DATABASE_PASS" accounts < /vagrant/vprofile-repo/src/main/resources/db_backup.sql
+mysql -u root -p"$DATABASE_PASS" -e "FLUSH PRIVILEGES"
 
-# Restart MariaDB server to apply changes
-sudo systemctl restart mariadb
+# Restart mariadb-server
+systemctl restart mariadb
