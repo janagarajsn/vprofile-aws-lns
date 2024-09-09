@@ -18,11 +18,12 @@ resource "aws_launch_template" "vprofile-app-lt" {
     instance_type = var.instance_type
     key_name = var.key_name
     vpc_security_group_ids = [var.security_group_id]
-    user_data = <<-EOF
+    user_data = base64encode(<<-EOF
               #!/bin/bash
               aws s3 cp s3://${var.bucket_name}/vprofile-v2.war /var/lib/tomcat9/webapps/ROOT.war
               systemctl restart tomcat
               EOF
+    )
 }
 
 # Create Auto Scaling Group

@@ -9,7 +9,7 @@ env:
     VPRO_S3_BUCKET_NAME: ${{ secrets.VPRO_S3_BUCKET_NAME }}
     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
+    
 jobs:
     build-and-deploy:
         runs-on: ubuntu-latest
@@ -28,7 +28,7 @@ jobs:
               run: mvn clean install
 
             - name: Configure AWS Credentials
-              uses: aws-actions/configure-aws-credentials@v1
+              uses: aws-actions/configure-aws-credentials@v3
               with:
                   aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
                   aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
