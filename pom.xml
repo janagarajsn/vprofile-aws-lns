@@ -208,15 +208,4 @@
 		
         </plugins>
     </build>
-    
-    <distributionManagement>
-        <repository>
-            <id>nexus</id>
-            <url>${env.NEXUS_URL}</url>
-        </repository>
-        <snapshotRepository>
-            <id>nexus</id>
-            <url>${env.NEXUS_SNAPSHOT_URL}</url>
-        </snapshotRepository>
-    </distributionManagement>
 </project>
