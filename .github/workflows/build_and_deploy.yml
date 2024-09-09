@@ -37,10 +37,15 @@ jobs:
             - name: Upload the Artifact to S3
               run: aws s3 cp ./target/vprofile-v2.war s3://${{ env.VPRO_S3_BUCKET_NAME }}
 
-            - name: Terraform init and plan inside terraform directory
+            - name: Terraform init and destroy
               run: |
                   cd terraform
                   terraform init
+                  terraform destroy -auto-approve
+            
+            - name: Terraform plan inside terraform directory
+              run: |
+                  cd terraform
                   terraform plan
 
             - name: Terraform apply inside terraform directory
