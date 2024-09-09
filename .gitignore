@@ -11,3 +11,5 @@ target/vprofile-v2/resources
 target/vprofile-v2/WEB-INF
 target/vprofile-v2.war
 target/maven-status
+/terraform/.terraform
+*.hcl
