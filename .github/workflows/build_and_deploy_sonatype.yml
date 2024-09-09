@@ -31,5 +31,10 @@ jobs:
             - name: Build with Maven
               run: mvn clean install
 
+            - name: Print nexus url and snapshot repository
+              run: |
+                  echo ${{ env.NEXUS_URL }}
+                  echo ${{ env.NEXUS_SNAPSHOTS_REPOSITORY }}
+            
             - name: Upload Artifact
               run: mvn deploy -DskipTests=true
