@@ -1,6 +1,6 @@
 # Action to build the maven application and upload the artifact to Sonatype and deploy using terraform
 
-name: Build and Deploy
+name: Sonatype Build and Deploy
 
 on:
     workflow_dispatch:
