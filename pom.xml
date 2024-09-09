@@ -208,24 +208,15 @@
 		
         </plugins>
     </build>
-    <profiles>
-        <profile>
-        <id>default</id>
-        <properties>
-            <nexus.url>${env.NEXUS_URL}</nexus.url>
-            <nexus.snapshot.url>${env.NEXUS_SNAPSHOT_URL}</nexus.snapshot.url>
-        </properties>
-        </profile>
-    </profiles>
-
+    
     <distributionManagement>
         <repository>
-        <id>nexus</id>
-        <url>${nexus.url}</url>
+            <id>nexus</id>
+            <url>${env.NEXUS_URL}</url>
         </repository>
         <snapshotRepository>
-        <id>nexus</id>
-        <url>${nexus.snapshot.url}</url>
+            <id>nexus</id>
+            <url>${env.NEXUS_SNAPSHOT_URL}</url>
         </snapshotRepository>
     </distributionManagement>
 </project>

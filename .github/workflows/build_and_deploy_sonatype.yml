@@ -25,16 +25,13 @@ jobs:
                   java-version: '11'
                   distribution: 'adopt'
 
-            - name: Download maven settings
-              run: curl -u ${{ secrets.NEXUS_USER }}:${{ secrets.NEXUS_PASSWORD }} http://${{ secrets.NEXUS_HOST }}:8081/repository/maven-releases/vprofile/maven-settings/1.0.0/maven-settings-1.0.0.xml -o ~/.m2/settings.xml --create-dirs
-
             - name: Build with Maven
               run: mvn clean install
 
-            - name: Print nexus url and snapshot repository
-              run: |
-                  echo ${{ env.NEXUS_URL }}
-                  echo ${{ env.NEXUS_SNAPSHOTS_REPOSITORY }}
-            
-            - name: Upload Artifact
-              run: mvn deploy -DskipTests=true
+            - name: Deploy to Sonatype
+              env:
+                  NEXUS_USERNAME: ${{ secrets.NEXUS_USER }}
+                  NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
+                  NEXUS_URL: ${{ secrets.NEXUS_URL }}
+                  NEXUS_SNAPSHOT_URL: ${{ secrets.NEXUS_SNAPSHOT_URL }}
+              run: mvn deploy --settings .github/maven/settings.xml
