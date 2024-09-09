@@ -22,3 +22,15 @@ sudo mysql -u root -p"$DATABASE_PASS" -e "grant all privileges on accounts.* TO 
 sudo mysql -u root -p"$DATABASE_PASS" -e "grant all privileges on accounts.* TO 'admin'@'%' identified by 'admin123'"
 sudo mysql -u root -p"$DATABASE_PASS" accounts < /tmp/vprofile-aws-lns/src/main/resources/db_backup.sql
 sudo mysql -u root -p"$DATABASE_PASS" -e "FLUSH PRIVILEGES"
+
+# Restart mariadb-server
+systemctl restart mariadb
+
+# Enable Firewall for mariadb and allowing port 3306
+sudo yum install firewalld -y
+sudo systemctl start firewalld
+sudo systemctl enable firewalld
+sudo firewall-cmd --get-active-zones
+sudo firewall-cmd --zone=public --add-port=3306/tcp --permanent
+sudo firewall-cmd --reload
+sudo systemctl restart mariadb
