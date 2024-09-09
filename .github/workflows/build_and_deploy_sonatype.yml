@@ -44,8 +44,12 @@ jobs:
                       -var="nexus_pass=${{ secrets.NEXUS_PASSWORD }}"
 
             - name: Terraform plan
-              run: terraform plan
+              run: |
+                  cd terraform
+                  terraform plan
 
             - name: Terraform apply
-              run: terraform apply -auto-approve \
+              run: 
+                  cd terraform
+                  terraform apply -auto-approve \
                       -var="nexus_pass=${{ secrets.NEXUS_PASSWORD }}"
