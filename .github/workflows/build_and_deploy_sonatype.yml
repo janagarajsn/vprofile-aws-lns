@@ -45,7 +45,7 @@ jobs:
             - name: Terraform plan
               run: |
                   cd terraform
-                  terraform plan
+                  terraform plan -var 'nexus_pass=${{ secrets.NEXUS_PASSWORD }}'
 
             - name: Terraform apply
               run: 
