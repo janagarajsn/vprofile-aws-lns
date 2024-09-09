@@ -9,7 +9,7 @@ env:
     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     NEXUS_URL: ${{ secrets.NEXUS_URL }}
-    NEXUS_SNAPSHOTS_REPOSITORY: ${{ secrets.NEXUS_SNAPSHOTS_REPOSITORY }}
+    NEXUS_SNAPSHOTS_REPOSITORY: ${{ secrets.NEXUS_SNAPSHOT_URL }}
     
 jobs:
     build-and-deploy:
