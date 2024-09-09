@@ -35,3 +35,16 @@ jobs:
                   NEXUS_URL: ${{ secrets.NEXUS_URL }}
                   NEXUS_SNAPSHOT_URL: ${{ secrets.NEXUS_SNAPSHOT_URL }}
               run: mvn deploy --settings .github/maven/settings.xml
+
+            - name: Terraform init and destroy
+              run: |
+                  cd terraform
+                  terraform init
+                  terraform destroy -auto-approve
+
+            - name: Terraform plan
+              run: terraform plan
+
+            - name: Terraform apply
+              run: terraform apply -auto-approve \
+                  -var="nexus_pass=${{ secrets.NEXUS_PASSWORD }}"
