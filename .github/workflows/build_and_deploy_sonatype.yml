@@ -48,6 +48,6 @@ jobs:
                   terraform plan -var 'nexus_pass=${{ secrets.NEXUS_PASSWORD }}'
 
             - name: Terraform apply
-              run: 
+              run: |
                   cd terraform
                   terraform apply -auto-approve -var 'nexus_pass=${{ secrets.NEXUS_PASSWORD }}'
