@@ -37,7 +37,7 @@ resource "aws_autoscaling_group" "vprofile-asg" {
     max_size = var.max_size
     desired_capacity = var.desired_capacity
     target_group_arns = [aws_lb_target_group.vprofile-alb-tg.arn]
-    vpc_zone_identifier = data.aws_subnets.default.ids
+    vpc_zone_identifier = data.aws_subnets.default.ids # High availability
 }
 
 # Create an Elastic Load Balancer
@@ -46,7 +46,7 @@ resource "aws_lb" "vprofile-alb" {
     internal = false
     load_balancer_type = "application"
     security_groups = [var.elb_security_group_id]
-    subnets = data.aws_subnets.default.ids
+    subnets = data.aws_subnets.default.ids # High availability
 }
 
 # Create an ALB Target Group
@@ -85,7 +85,7 @@ resource "aws_lb_listener" "vprofile-alb-listener-https" {
     load_balancer_arn = aws_lb.vprofile-alb.arn
     port = 443
     protocol = "HTTPS"
-    certificate_arn = var.certificate_arn
+    certificate_arn = var.certificate_arn # Certificate mandatory for https
 
     default_action {
         target_group_arn = aws_lb_target_group.vprofile-alb-tg.arn
