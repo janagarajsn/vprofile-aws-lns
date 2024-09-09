@@ -27,13 +27,6 @@ jobs:
             - name: Build with Maven
               run: mvn clean install
 
-            - name: Configure AWS Credentials
-              uses: aws-actions/configure-aws-credentials@v3
-              with:
-                  aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
-                  aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
-                  aws-region: us-east-1
-            
             - name: Upload the Artifact to S3
               run: aws s3 cp ./target/vprofile-v2.war s3://${{ env.VPRO_S3_BUCKET_NAME }}
 
