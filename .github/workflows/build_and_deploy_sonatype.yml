@@ -40,8 +40,7 @@ jobs:
               run: |
                   cd terraform
                   terraform init
-                  terraform destroy -auto-approve \
-                      -var="nexus_pass=${{ secrets.NEXUS_PASSWORD }}"
+                  terraform destroy -auto-approve -var 'nexus_pass=${{ secrets.NEXUS_PASSWORD }}'
 
             - name: Terraform plan
               run: |
@@ -51,5 +50,4 @@ jobs:
             - name: Terraform apply
               run: 
                   cd terraform
-                  terraform apply -auto-approve \
-                      -var="nexus_pass=${{ secrets.NEXUS_PASSWORD }}"
+                  terraform apply -auto-approve -var 'nexus_pass=${{ secrets.NEXUS_PASSWORD }}'
