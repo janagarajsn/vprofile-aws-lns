@@ -40,11 +40,12 @@ jobs:
               run: |
                   cd terraform
                   terraform init
-                  terraform destroy -auto-approve
+                  terraform destroy -auto-approve \
+                      -var="nexus_pass=${{ secrets.NEXUS_PASSWORD }}"
 
             - name: Terraform plan
               run: terraform plan
 
             - name: Terraform apply
               run: terraform apply -auto-approve \
-                  -var="nexus_pass=${{ secrets.NEXUS_PASSWORD }}"
+                      -var="nexus_pass=${{ secrets.NEXUS_PASSWORD }}"
