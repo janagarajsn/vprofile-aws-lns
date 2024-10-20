@@ -69,20 +69,3 @@ variable "certificate_arn" {
   type        = string
   default     = "arn:aws:acm:us-east-1:307873435526:certificate/065ae8b3-e675-49b4-acf7-88ebce3669d9"
 }
-
-variable "nexus_ip" {
-  description = "The nexus ip"
-  type        = string
-  default     = "34.228.16.166"
-}
-
-variable "nexus_user" {
-  description = "The nexus user"
-  type        = string
-  default     = "admin"
-}
-
-variable "nexus_pass" {
-  description = "The nexus pass"
-  type        = string
-}
